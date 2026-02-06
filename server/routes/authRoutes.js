@@ -5,8 +5,14 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
+// REGISTER
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(400).json({ message: "Email already exists" });
+  }
 
   const hashed = await bcrypt.hash(password, 10);
 
@@ -19,14 +25,21 @@ router.post("/register", async (req, res) => {
   res.json({ message: "Registered", user });
 });
 
+// LOGIN
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ message: "Invalid email" });
+
+  if (!user) {
+    return res.status(400).json({ message: "User not registered" });
+  }
 
   const valid = await bcrypt.compare(password, user.password);
-  if (!valid) return res.status(400).json({ message: "Invalid password" });
+
+  if (!valid) {
+    return res.status(400).json({ message: "Wrong password" });
+  }
 
   const token = jwt.sign(
     { id: user._id, role: user.role },
