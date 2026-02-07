@@ -14,13 +14,16 @@ export default function Plans() {
   };
 
   return (
-    <div>
-      <h1>Plans</h1>
+    <div className="row">
       {plans.map(p => (
-        <div key={p._id}>
-          <h3>{p.name}</h3>
-          <p>₹{p.price}</p>
-          <button onClick={() => subscribe(p._id)}>Subscribe</button>
+        <div className="col-md-4 mb-3" key={p._id}>
+          <div className="card p-3">
+            <h5>{p.name}</h5>
+            <p>₹ {p.price}</p>
+            <button className="btn btn-success" onClick={() => subscribe(p._id)}>
+              Subscribe
+            </button>
+          </div>
         </div>
       ))}
     </div>

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import api from "../api/axios";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../ThemeContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ export default function Login() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { theme } = useContext(ThemeContext);
 
   const handleLogin = async () => {
     try {
@@ -19,43 +21,38 @@ export default function Login() {
       dispatch(loginSuccess(res.data));
 
       alert("Login Successful");
-      navigate("/plans");
-    } catch (err) {
+      navigate("/dashboard");
+    } catch {
       alert("Invalid email or password");
     }
   };
 
   return (
-    <div className="p-10">
-      <h1 className="text-xl font-bold mb-4">Login</h1>
+    <div className="container d-flex justify-content-center mt-5">
+      <div className={`card p-4 shadow ${theme === "dark" ? "bg-dark text-white" : ""}`} style={{ width: "400px" }}>
+        <h3 className="text-center mb-3">Login</h3>
 
-      <input
-        className="border p-2 block mb-2"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <input
+          className="form-control mb-2"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <input
-        className="border p-2 block mb-2"
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <input
+          className="form-control mb-3"
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button
-        className="bg-blue-600 text-white px-4 py-2 mr-2"
-        onClick={handleLogin}
-      >
-        Login
-      </button>
+        <button className="btn btn-primary w-100 mb-2" onClick={handleLogin}>
+          Login
+        </button>
 
-      {/* 👉 REGISTER BUTTON */}
-      <button
-        className="bg-green-600 text-white px-4 py-2"
-        onClick={() => navigate("/register")}
-      >
-        Register
-      </button>
+        <button className="btn btn-success w-100" onClick={() => navigate("/register")}>
+          Register
+        </button>
+      </div>
     </div>
   );
 }
