@@ -31,8 +31,13 @@ router.get("/my-subscription", auth, async (req, res) => {
 });
 
 router.get("/admin/subscriptions", auth, adminOnly, async (req, res) => {
-  const subs = await Subscription.find().populate("user_id plan_id");
+  const subs = await Subscription.find()
+    .populate("user_id", "name email role")   // <-- IMPORTANT
+    .populate("plan_id", "name price duration features"); // <-- IMPORTANT
+
   res.json(subs);
 });
+
+
 
 export default router;

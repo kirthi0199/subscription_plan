@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../ThemeContext";
 
 export default function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "user"
+  });
+
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
 
@@ -20,7 +26,7 @@ export default function Register() {
 
   return (
     <div className="container d-flex justify-content-center mt-5">
-      <div className={`card p-4 shadow ${theme === "dark" ? "bg-dark text-white" : ""}`} style={{ width: "400px" }}>
+      <div className={`card p-4 shadow ${theme === "dark" ? "bg-dark text-white" : ""}`} style={{ width: "450px" }}>
         <h3 className="text-center mb-3">Register</h3>
 
         <input
@@ -41,6 +47,16 @@ export default function Register() {
           placeholder="Password"
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
+
+        {/* 👉 ROLE DROPDOWN */}
+        <select
+          className="form-control mb-3"
+          value={form.role}
+          onChange={(e) => setForm({ ...form, role: e.target.value })}
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
 
         <button className="btn btn-primary w-100" onClick={handleRegister}>
           Register
