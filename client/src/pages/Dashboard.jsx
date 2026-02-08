@@ -10,16 +10,27 @@ export default function Dashboard() {
   const [mySub, setMySub] = useState(null);
   const [allSubs, setAllSubs] = useState([]);
 
-  useEffect(() => {
-    if (!user) return;
+const [mySubs, setMySubs] = useState([]); // <-- change state name
+useEffect(() => {
+  if (!user) return;
 
-    if (user.role === "user") {
-      api.get("/my-subscription").then(res => setMySub(res.data));
-    } 
-    else if (user.role === "admin") {
-      api.get("/admin/subscriptions").then(res => setAllSubs(res.data));
-    }
-  }, [user]);
+  if (user.role === "user") {
+    api.get("/my-subscription")
+      .then(res =>
+        setMySubs(Array.isArray(res.data) ? res.data : [res.data])
+      )
+      .catch(() => setMySubs([]));
+  } 
+  else if (user.role === "admin") {
+    api.get("/admin/subscriptions")
+      .then(res => setAllSubs(res.data || []));
+  }
+}, [user]);
+
+
+if (!user) {
+  return <h3 className="text-center mt-5">Loading...</h3>;
+}
 
   return (
     <div className="container mt-4">
@@ -28,20 +39,27 @@ export default function Dashboard() {
       </h2>
 
       {/* ================= USER VIEW ================= */}
-      {user?.role === "user" && (
-        <div className={`card p-4 ${theme === "dark" ? "bg-dark text-white" : ""}`}>
-          {mySub ? (
-            <>
-              <h4>Plan: {mySub.plan_id.name}</h4>
-              <p><b>Status:</b> {mySub.status}</p>
-              <p><b>Start:</b> {new Date(mySub.start_date).toDateString()}</p>
-              <p><b>End:</b> {new Date(mySub.end_date).toDateString()}</p>
-            </>
-          ) : (
-            <h5>No active subscription</h5>
-          )}
+     {user?.role === "user" && (
+  <div className="row">
+    {mySubs.length === 0 ? (
+      <h4 className="text-center">No subscriptions yet</h4>
+    ) : (
+      mySubs.map(s => (
+        <div className="col-md-4 mb-3" key={s._id}>
+          <div className={`card p-3 ${theme === "dark" ? "bg-dark text-white" : ""}`}>
+            <h5>Plan: {s.plan_id.name}</h5>
+            <p><b>Status:</b> {s.status}</p>
+            <p>
+              <b>From:</b> {new Date(s.start_date).toDateString()} <br />
+              <b>To:</b> {new Date(s.end_date).toDateString()}
+            </p>
+          </div>
         </div>
-      )}
+      ))
+    )}
+  </div>
+)}
+
 
       {/* ================= ADMIN VIEW ================= */}
       {user?.role === "admin" && (

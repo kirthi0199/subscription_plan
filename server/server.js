@@ -16,7 +16,8 @@ app.use(express.json());
 connectDB().then(seedPlans);
 
 app.use("/api/auth", authRoutes);
-app.use("/api/plans", planRoutes);
+
+app.use("/api", planRoutes);
 app.use("/api", subscriptionRoutes);
 
 app.listen(process.env.PORT, () =>

@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import api from "../api/axios";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../store/authSlice";
+import { setAuth } from "../store/authSlice";   // ✅ FIXED IMPORT
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../ThemeContext";
 
@@ -13,23 +13,36 @@ export default function Login() {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
     try {
-      const res = await api.post("/auth/login", { email, password });
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });   // ✅ FIXED — no more "form"
 
-      localStorage.setItem("token", res.data.token);
-      dispatch(loginSuccess(res.data));
+      dispatch(
+        setAuth({
+          token: res.data.token,
+          user: res.data.user,
+        })
+      );
 
-      alert("Login Successful");
       navigate("/dashboard");
-    } catch {
-      alert("Invalid email or password");
+    } catch (err) {
+      alert("Invalid credentials");
     }
   };
 
   return (
     <div className="container d-flex justify-content-center mt-5">
-      <div className={`card p-4 shadow ${theme === "dark" ? "bg-dark text-white" : ""}`} style={{ width: "400px" }}>
+      <div
+        className={`card p-4 shadow ${
+          theme === "dark" ? "bg-dark text-white" : ""
+        }`}
+        style={{ width: "400px" }}
+      >
         <h3 className="text-center mb-3">Login</h3>
 
         <input
@@ -49,7 +62,10 @@ export default function Login() {
           Login
         </button>
 
-        <button className="btn btn-success w-100" onClick={() => navigate("/register")}>
+        <button
+          className="btn btn-success w-100"
+          onClick={() => navigate("/register")}
+        >
           Register
         </button>
       </div>
