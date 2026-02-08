@@ -1,27 +1,37 @@
 import Plan from "../models/Plan.js";
 
-export const seedPlans = async () => {
-  const count = await Plan.countDocuments();
-  if (count === 0) {
-    await Plan.insertMany([
+const seedPlans = async () => {
+  try {
+    const count = await Plan.countDocuments();
+
+    if (count > 0) {
+      console.log("✅ Plans already exist — skipping seed.");
+      return;
+    }
+
+    const plans = [
       {
         name: "Basic",
-        price: 99,
-        features: ["Email Support", "1 User"],
+        price: 199,
         duration: 30
       },
       {
-        name: "Pro",
-        price: 299,
-        features: ["Priority Support", "5 Users"],
+        name: "Standard",
+        price: 499,
         duration: 90
       },
       {
-        name: "Enterprise",
+        name: "Premium",
         price: 999,
-        features: ["Dedicated Support", "Unlimited Users"],
-        duration: 365
+        duration: 180
       }
-    ]);
+    ];
+
+    await Plan.insertMany(plans);
+    console.log("🌱 Plans seeded successfully!");
+  } catch (err) {
+    console.error("❌ Seeding error:", err);
   }
 };
+
+export default seedPlans;

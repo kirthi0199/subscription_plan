@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import api from "../api/axios";
 import { useSelector } from "react-redux";
 import { ThemeContext } from "../ThemeContext";
-
+ import { Link } from "react-router-dom";
 export default function Dashboard() {
   const { theme } = useContext(ThemeContext);
   const user = useSelector(state => state.auth.user);
@@ -34,9 +34,17 @@ if (!user) {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-3">
-        {user?.role === "admin" ? "Admin Dashboard" : "My Dashboard"}
-      </h2>
+   
+
+
+<h2 className="mb-3">
+  {user?.role === "admin" ? "Admin Dashboard" : "My Dashboard"}
+</h2>
+
+<Link className="btn btn-success mb-3" to="/plans">
+  View Plans / Subscribe
+</Link>
+
 
       {/* ================= USER VIEW ================= */}
      {user?.role === "user" && (

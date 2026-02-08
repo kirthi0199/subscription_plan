@@ -5,7 +5,8 @@ import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import planRoutes from "./routes/planRoutes.js";
 import subscriptionRoutes from "./routes/subscriptionRoutes.js";
-import { seedPlans } from "./seed/seedPlans.js";
+import seedPlans from "./seed/seedPlans.js";
+
 
 dotenv.config();
 const app = express();
@@ -13,7 +14,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-connectDB().then(seedPlans);
+connectDB()
+  .then(async () => {
+    console.log("MongoDB connected");
+
+    // 🔥 Automatic seeding here
+    await seedPlans();
+  })
+  .catch(err => console.log("DB Error:", err));
+
 
 app.use("/api/auth", authRoutes);
 
