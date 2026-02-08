@@ -1,22 +1,95 @@
-body.light {
-  background-color: #f8f9fa;
-  color: #000;
+/* ====== GLOBAL THEME FIX ====== */
+html, body, #root {
+  min-height: 100vh;
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  
 }
 
+/* ========== LIGHT MODE ========== */
+body.light {
+  background-color: #ffffff;
+ 
+}
+
+/* ========== DARK MODE ========== */
 body.dark {
   background-color: #121212;
-  color: #ffffff;
+
+
 }
 
+/* Make React root follow body */
+body.dark #root {
+  background-color: #121212;
+}
+
+/* Dark mode cards */
 .dark .card {
   background-color: #1e1e1e;
   color: white;
 }
 
+/* Dark navbar */
 .dark .navbar {
   background-color: #000 !important;
 }
-
+body.dark, body.dark #root {
+  background: linear-gradient(180deg, #0b0f14, #121212);
+}
+/* Buttons in dark mode */
 .dark button {
   border: 1px solid white;
+}
+
+/* ====== PLAN CARD DESIGN ====== */
+.plan-wrapper {
+  width: 300px;
+}
+
+.plan-card {
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 20px rgba(10, 9, 9, 0.15);
+}
+
+.plan-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+/* ///////////////// */
+
+/* ===== LOGIN PAGE BACKGROUND ===== */
+
+.login-page {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Light mode image */
+body.light .login-page {
+  background-image: url("../src/assets/light.jpg");
+}
+
+/* Dark mode image */
+body.dark .login-page {
+  background-image: url("../src/assets/dark.jpg");
+}
+
+/* Make login card slightly transparent (looks nice) */
+.login-card {
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+}
+
+/* Dark card override */
+body.dark .login-card {
+  background: rgba(30, 30, 30, 0.95);
 }

@@ -25,9 +25,9 @@ export default function Navbar() {
         <div className="ms-auto d-flex align-items-center gap-3">
 
           {/* Dark / Light toggle ALWAYS visible */}
-          <button className="btn btn-outline-primary" onClick={toggleTheme}>
-            {theme === "dark" ? "Light Mode" : "Dark Mode"}
-          </button>
+          <button onClick={toggleTheme} className="btn btn-outline-primary">
+      {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+    </button>
 
           {/* Show these links ONLY after login */}
           {user && (
